@@ -1,5 +1,6 @@
 package com.gabriel.gestao_operacional.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -21,6 +22,7 @@ public class ItemTemplate {
 
     private String unidade;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "template_id")
     private Template template;
@@ -29,7 +31,7 @@ public class ItemTemplate {
     }
 
     public ItemTemplate(String materialCodigo, String materialNome, Setor setorDestino,
-                         Double quantidadePadrao, String unidade, Template template) {
+            Double quantidadePadrao, String unidade, Template template) {
         this.materialCodigo = materialCodigo;
         this.materialNome = materialNome;
         this.setorDestino = setorDestino;

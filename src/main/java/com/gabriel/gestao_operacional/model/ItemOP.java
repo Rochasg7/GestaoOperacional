@@ -1,5 +1,6 @@
 package com.gabriel.gestao_operacional.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -25,6 +26,7 @@ public class ItemOP {
 
     private String materialSubstitutoNome;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "ordem_producao_id")
     private OrdemProducao ordemProducao;
