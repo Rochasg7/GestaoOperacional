@@ -1,92 +1,165 @@
-# Sistema de Gestão de Almoxarifado e Ordens de Produção
+# Sistema de Gestão Operacional
 
-Sistema pessoal para digitalizar o controle de Ordens de Produção (OPs) e do Almoxarifado em empresas do setor industrial que fabricam produtos sob encomenda para clientes corporativos.
+Sistema web para acompanhar **Ordens de Produção (OPs)** do pedido até a expedição em empresas de manufatura sob encomenda. Ele registra por quais setores a OP passou, quem a moveu e quando, e organiza os materiais de cada OP por setor de destino.
 
-Atualmente, em muitas empresas desse tipo, esses processos ainda são feitos de forma manual: as OPs circulam em papel entre os setores da fábrica e o controle de materiais é feito em planilhas Excel com PROCV. Isso gera perda de rastreabilidade, dificuldade em saber o status/localização de uma OP, e retrabalho na separação de materiais no almoxarifado.
+Projeto pessoal de estudo de engenharia de software e de portfólio, desenvolvido em ritmo próprio. Foi inspirado em desafios comuns de operações de produção, sem vínculo com nenhuma empresa específica. Todos os dados usados nos exemplos são fictícios.
 
-Este projeto nasceu como estudo pessoal de engenharia de software e também como projeto de portfólio, inspirado em desafios reais observados no dia a dia de operações de produção e almoxarifado, sem vínculo com nenhuma empresa específica. É desenvolvido em ritmo próprio, sem prazo definido.
+---
 
-## Objetivo
+## O problema
 
-Substituir o fluxo manual por um sistema digital que permita:
+Em muitas fábricas que produzem sob encomenda, o controle da produção ainda é feito em papel e planilhas:
 
-- Cadastrar e acompanhar Ordens de Produção do pedido até a expedição
-- Rastrear a passagem da OP por todos os setores de produção, com login próprio para cada líder de setor
-- Sugerir automaticamente os materiais de cada OP a partir de templates pré-cadastrados por tipo de pedido, com validação da Engenharia antes da confirmação
-- Registrar substituições de material por falta de estoque (código/nome do material substituto)
-- Dar visibilidade sobre o status de cada OP, evitando que se "perca" entre os setores
+- A OP é uma folha física que circula entre os setores, e ninguém sabe ao certo **onde ela está**. Ela "some" ou demora a aparecer.
+- A folha lista os materiais de **todos os setores misturados**, e quem separa os materiais perde tempo descobrindo o que vai para cada um.
+- A entrega de material é confirmada com um "OK" escrito à mão, **sem registro de quem fez nem quando**.
+- Não há histórico: depois que a OP termina, não dá para reconstruir o caminho que ela percorreu.
 
-## Processo atual (AS-IS) — resumo
+## A proposta
 
-- OPs são criadas pela Engenharia a partir de pedidos de clientes, seguindo padrões de produção já conhecidos
-- A folha da OP traz código, pedido do cliente, materiais, setor de destino e quantidade — a data de entrega é anotada manualmente
-- A ordem entre os setores (Corte e Dobra, Acrílico, Montagem, Preparação, Pintura, Serralheria) varia por OP e é decidida junto com os líderes
-- A folha física circula entre os setores sem controle digital, o que causa atrasos, "perda" temporária da OP e entrega de materiais fora de ordem
-- O almoxarifado entrega os materiais aos setores sem reorganização prévia, perdendo tempo para separar o que pertence a cada um
-- Controle de estoque é manual, com contagens pontuais pedidas pela Engenharia
-- Volume médio: mais de 50 OPs por mês
+Uma aplicação em que cada perfil da operação enxerga e registra a sua parte do processo:
 
-## Escopo do MVP
+| Perfil | O que faz no sistema |
+|---|---|
+| **Engenharia** | Cadastra templates de materiais por tipo de pedido e cria a OP a partir deles, revisando os materiais antes de confirmar |
+| **Líder de setor** | Consulta as OPs e avança a OP para o próximo setor; cada avanço fica registrado |
+| **Almoxarifado** | Vê os materiais de cada OP já separados por setor de destino |
+| **Expedição** | Confere a OP e a conclui |
 
-O foco é um MVP enxuto, sem funcionalidades de financeiro, compras completas, ERP ou aplicativo mobile.
+## Escopo
 
-- Cadastro de Setores, Usuários (login por líder de setor), Templates de materiais e Ordens de Produção
-- Avanço de status da OP entre setores (`AguardandoSeparacao` → `EmProducao` → `EmExpedicao` → `Concluida`)
-- Sugestão automática de materiais por template, com ajuste/validação da Engenharia
-- Registro de substituição de material por falta de estoque
-- Autenticação simples (sem Spring Security nesta fase)
+O projeto é dividido em entregas incrementais para manter o MVP enxuto.
 
-## Modelagem
+**MVP (em desenvolvimento)**
+- Cadastro de setores, usuários, templates de materiais e ordens de produção
+- Criação de OP a partir de template, com os itens copiados para a OP e revisáveis pela Engenharia
+- Registro de material substituto quando o original está em falta
+- Avanço da OP entre setores com histórico (setor de origem, destino, responsável e data/hora)
+- Status da OP: `AGUARDANDO_SEPARACAO` → `EM_PRODUCAO` → `EM_EXPEDICAO` → `CONCLUIDA`
+- Telas web: lista de OPs, detalhe com histórico, avanço de setor e separação de materiais por setor
 
-- **Casos de uso, diagrama de classes e diagrama de estados** definidos na fase de modelagem UML
-- Entidades principais: `Usuario`, `Setor`, `Template`, `ItemTemplate`, `OrdemProducao`, `ItemOP`, `Movimentacao`
-- Banco de dados relacional com as tabelas: `setor`, `usuario`, `template`, `item_template`, `ordem_producao`, `itemop`, `movimentacao`
-- IDs modelados como `Long`, seguindo padrão de mercado
+**V2**
+- Data de entrega estruturada, com alerta de atraso
+- Confirmação item a item da entrega de material a cada setor
+- Montagem do kit de instalação para a expedição
+- Autenticação com senha criptografada (Spring Security + BCrypt)
+- Tratamento de erros com respostas HTTP adequadas (404, 400)
+
+**Futuro**
+- Controle de estoque e entrada de notas fiscais
+- Priorização de OPs urgentes
+- Notificações e atualização em tempo real
+- Dashboards e indicadores
+- Leitura de OP por QR Code ou código de barras
+
+## Arquitetura
+
+Aplicação **Spring Boot** em camadas, com o front-end servido pelo próprio back-end.
+
+```
+Navegador (HTML/CSS/JS)
+        │  fetch (JSON)
+        ▼
+Controller  →  Service  →  Repository  →  MySQL
+ (rotas REST)   (regras)    (Spring Data JPA)
+```
+
+- **Controller:** recebe as requisições HTTP e devolve JSON
+- **Service:** concentra as regras de negócio (status inicial da OP, registro de movimentação etc.)
+- **Repository:** acesso ao banco via Spring Data JPA
+- **Model:** entidades JPA mapeadas para as tabelas
+
+Decisões principais:
+- Injeção de dependência por construtor
+- IDs do tipo `Long`
+- Os itens da OP são **cópias** dos itens do template, para que uma alteração no template não mude OPs já criadas
+- Em relações bidirecionais, o lado filho é ignorado na serialização JSON, para evitar recursão
+- A senha do usuário é aceita na criação, mas nunca devolvida pela API
+
+## Modelo de dados
+
+Entidades: `Setor`, `Usuario`, `Template`, `ItemTemplate`, `OrdemProducao`, `ItemOP`, `Movimentacao`.
+
+| Tabela | Conteúdo |
+|---|---|
+| `setor` | Setores da produção e a ordem padrão entre eles |
+| `usuario` | Usuários e o setor a que pertencem |
+| `template` / `item_template` | Modelos de pedido e seus materiais padrão |
+| `ordem_producao` / `itemop` | OPs, status, setor atual e materiais |
+| `movimentacao` | Histórico de passagens da OP entre setores |
+
+Os diagramas de caso de uso, de classes e de estados estão na pasta [`Diagramas`](Diagramas).
+
+## API
+
+| Método | Rota | Descrição |
+|---|---|---|
+| `POST` | `/setores` | Cadastra um setor |
+| `GET` | `/setores` | Lista os setores |
+| `POST` | `/usuarios` | Cadastra um usuário |
+| `GET` | `/usuarios` | Lista os usuários |
+| `POST` | `/templates` | Cadastra um template com seus itens |
+| `GET` | `/templates` | Lista os templates |
+| `POST` | `/ordens-producao` | Cria uma OP com seus itens |
+| `GET` | `/ordens-producao` | Lista as OPs |
+| `GET` | `/ordens-producao/{id}` | Busca uma OP |
+| `POST` | `/movimentacoes/avancar` | Avança a OP para outro setor |
+| `POST` | `/movimentacoes/concluir/{id}` | Conclui a OP |
+| `GET` | `/movimentacoes/historico/{id}` | Histórico de movimentações da OP |
+
+Exemplo de corpo para avançar uma OP:
+
+```json
+{
+  "ordemProducaoId": 3,
+  "setorDestinoId": 2,
+  "usuarioId": 1
+}
+```
 
 ## Tecnologias
 
-| Camada       | Tecnologia                                  |
-|--------------|----------------------------------------------|
-| Backend      | Java + Spring Boot (Spring Data JPA)          |
-| Banco de dados | MySQL                                       |
-| Frontend     | HTML, CSS e JavaScript                        |
-| Documentação | UML (Mermaid)                                 |
-| Versionamento| Git / GitHub                                  |
+| Camada | Tecnologia |
+|---|---|
+| Back-end | Java 17, Spring Boot 4, Spring Data JPA, Hibernate |
+| Banco de dados | MySQL 8 |
+| Front-end | HTML, CSS e JavaScript |
+| Testes de API | Postman |
+| Modelagem | UML |
+| Versionamento | Git / GitHub |
 
-## Fases do projeto
+## Como rodar
 
-1. Entender o problema (AS-IS)
-2. Mapear o processo atual
-3. Definir o processo futuro (TO-BE)
-4. Definir MVP / V2 / evoluções futuras
-5. Modelagem UML ✅
-6. Modelagem do banco de dados ✅
-7. Backend (em andamento)
-8. Testes
-9. Frontend
-10. Testes
-11. Implantação
-12. Evolução
+**Pré-requisitos:** JDK 17 ou superior e MySQL 8.
 
-## Status atual
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/Rochasg7/GestaoOperacional.git
+   cd Sistema-Gestao-Operacional
+   ```
+2. Crie o banco no MySQL:
+   ```sql
+   CREATE DATABASE gestao_operacional;
+   ```
+3. Copie `src/main/resources/application.properties.example` para `application.properties`, na mesma pasta, e preencha usuário e senha do seu MySQL. Esse arquivo não é versionado.
+4. Suba a aplicação. As tabelas são criadas automaticamente na primeira execução:
+   ```bash
+   ./mvnw spring-boot:run
+   ```
+5. (Opcional) Para ter dados de exemplo, execute o script `scripts/dados-teste.sql` no MySQL **depois** da primeira execução.
 
-Projeto em desenvolvimento na fase de **backend**, com o projeto Spring Boot já criado e publicado no repositório.
+A API fica disponível em `http://localhost:8080`.
 
-## Como rodar (em construção)
+## Status
 
-> Instruções de configuração e execução serão adicionadas conforme o backend avançar.
+| Fase | Situação |
+|---|---|
+| Levantamento do processo atual e definição do escopo | ✅ Concluída |
+| Modelagem UML e do banco de dados | ✅ Concluída |
+| Back-end do MVP | ✅ Concluído |
+| Front-end do MVP | 🔄 Em andamento |
+| Testes e implantação | ⏳ Planejada |
 
-```bash
-# Clonar o repositório
-git clone https://github.com/Rochasg7/Sistema-Gestao-Operacional.git
+## Autores
 
-# Entrar na pasta do projeto
-cd Sistema-Gestao-Operacional
-
-# Rodar com Maven
-./mvnw spring-boot:run
-```
-
-## Autor
-
-Projeto pessoal desenvolvido por **Gabriel de Souza Rocha** e **Jorge Ricardo de Carvalho Simões**, estudantes de Sistemas de Informação (UNIVAS), como estudo de engenharia de software, gestão de projetos e projeto de portfólio.
+Desenvolvido por **Gabriel de Souza Rocha** e **Jorge Ricardo de Carvalho Simões**, estudantes de Sistemas de Informação (UNIVAS).
