@@ -1,5 +1,6 @@
 package com.gabriel.gestao_operacional.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -11,6 +12,7 @@ public class Movimentacao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "ordem_producao_id")
     private OrdemProducao ordemProducao;

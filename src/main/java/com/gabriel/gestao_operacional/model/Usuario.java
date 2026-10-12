@@ -1,5 +1,6 @@
 package com.gabriel.gestao_operacional.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 @Entity
@@ -14,6 +15,7 @@ public class Usuario {
     @Column(unique = true)
     private String login;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String senha;
 
     @ManyToOne

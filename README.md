@@ -40,7 +40,7 @@ O foco é um MVP enxuto, sem funcionalidades de financeiro, compras completas, E
 
 - **Casos de uso, diagrama de classes e diagrama de estados** definidos na fase de modelagem UML
 - Entidades principais: `Usuario`, `Setor`, `Template`, `ItemTemplate`, `OrdemProducao`, `ItemOP`, `Movimentacao`
-- Banco de dados relacional com as tabelas: `setor`, `usuario`, `template`, `item_template`, `ordem_producao`, `item_op`, `movimentacao`
+- Banco de dados relacional com as tabelas: `setor`, `usuario`, `template`, `item_template`, `ordem_producao`, `itemop`, `movimentacao`
 - IDs modelados como `Long`, seguindo padrão de mercado
 
 ## Tecnologias
