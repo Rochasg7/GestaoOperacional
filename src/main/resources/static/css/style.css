@@ -1,0 +1,284 @@
+/* ===== Variáveis: cores e medidas usadas no sistema todo ===== */
+:root {
+    --fundo: #f4f5f7;
+    --superficie: #ffffff;
+    --borda: #dfe1e6;
+    --texto: #1f2328;
+    --texto-suave: #5f6670;
+    --destaque: #1f4e79;
+
+    --aguardando: #8a5a00;
+    --aguardando-fundo: #fff4d6;
+    --producao: #0b5cad;
+    --producao-fundo: #e1efff;
+    --expedicao: #6b3fa0;
+    --expedicao-fundo: #efe6fa;
+    --concluida: #1d6b3a;
+    --concluida-fundo: #e2f4e8;
+    --erro: #b42318;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", Roboto, Arial, sans-serif;
+    font-size: 15px;
+    color: var(--texto);
+    background: var(--fundo);
+}
+
+/* ===== Barra superior ===== */
+.topo {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    padding: 0 24px;
+    height: 56px;
+    background: var(--destaque);
+    color: #fff;
+}
+
+.marca {
+    font-weight: 600;
+    font-size: 17px;
+}
+
+.topo nav a {
+    color: rgba(255, 255, 255, 0.75);
+    display: inline-block;
+    text-decoration: none;
+    padding: 17px 0 16px;
+    border-bottom: 3px solid transparent;
+    margin-right: 20px;
+}
+
+.topo nav a.ativo,
+.topo nav a:hover {
+    color: #fff;
+    border-bottom: 3px solid #fff;
+}
+
+/* ===== Área principal ===== */
+.conteudo {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px;
+}
+
+.cabecalho-pagina {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+h1 {
+    margin: 0;
+    font-size: 22px;
+}
+
+.contador {
+    color: var(--texto-suave);
+}
+
+.mensagem {
+    padding: 24px;
+    background: var(--superficie);
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+    color: var(--texto-suave);
+}
+
+.mensagem.erro {
+    color: var(--erro);
+}
+
+/* ===== Tabela ===== */
+.tabela {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--superficie);
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.tabela th {
+    text-align: left;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--texto-suave);
+    background: #fafbfc;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--borda);
+}
+
+.tabela td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--borda);
+}
+
+.tabela tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.tabela tbody tr {
+    cursor: pointer;
+}
+
+.tabela tbody tr:hover {
+    background: #f0f5fb;
+}
+
+.numero-op {
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* ===== Etiquetas de status ===== */
+.etiqueta {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.status-aguardando_separacao { color: var(--aguardando); background: var(--aguardando-fundo); }
+.status-em_producao          { color: var(--producao);   background: var(--producao-fundo); }
+.status-em_expedicao         { color: var(--expedicao);  background: var(--expedicao-fundo); }
+.status-concluida            { color: var(--concluida);  background: var(--concluida-fundo); }
+
+/* ===== Detalhe da OP ===== */
+.voltar {
+    display: inline-block;
+    margin-bottom: 16px;
+    color: var(--destaque);
+    text-decoration: none;
+}
+
+.voltar:hover {
+    text-decoration: underline;
+}
+
+.cartao {
+    background: var(--superficie);
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+}
+
+h2 {
+    margin: 0 0 12px;
+    font-size: 17px;
+}
+
+.texto-suave {
+    color: var(--texto-suave);
+    margin: 0;
+}
+
+/* Lista de "rótulo: valor" do resumo, em colunas */
+.resumo {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px 24px;
+    margin: 8px 0 0;
+}
+
+.resumo dt {
+    font-size: 13px;
+    color: var(--texto-suave);
+}
+
+.resumo dd {
+    margin: 2px 0 0;
+    font-weight: 600;
+}
+
+/* Tabela dentro de um cartão: sem borda externa própria */
+.tabela-simples {
+    border: none;
+    border-radius: 0;
+}
+
+.tabela-simples tbody tr {
+    cursor: default;
+}
+
+.tabela-simples tbody tr:hover {
+    background: none;
+}
+
+.tabela .direita {
+    text-align: right;
+    white-space: nowrap;
+}
+
+/* Deixa a tabela rolar de lado em telas estreitas, sem estourar o cartão */
+.rolagem-horizontal {
+    overflow-x: auto;
+}
+
+.substituto {
+    font-size: 13px;
+    color: var(--aguardando);
+    margin-top: 2px;
+}
+
+/* Histórico em forma de linha do tempo */
+.historico {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.historico li {
+    display: grid;
+    grid-template-columns: 150px 1fr auto;
+    gap: 16px;
+    padding: 10px 0 10px 20px;
+    border-left: 2px solid var(--borda);
+    position: relative;
+}
+
+/* Bolinha da linha do tempo */
+.historico li::before {
+    content: "";
+    position: absolute;
+    left: -6px;
+    top: 15px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--destaque);
+}
+
+.historico-data {
+    color: var(--texto-suave);
+    white-space: nowrap;
+}
+
+.historico-caminho {
+    font-weight: 600;
+}
+
+.historico-usuario {
+    color: var(--texto-suave);
+}
+
+/* ===== Telas estreitas (celular) ===== */
+@media (max-width: 700px) {
+    .topo { gap: 16px; padding: 0 16px; }
+    .conteudo { padding: 16px; }
+    .tabela th, .tabela td { padding: 10px 8px; font-size: 14px; }
+    .cartao { padding: 16px; }
+    .historico li { grid-template-columns: 1fr; gap: 2px; }
+}

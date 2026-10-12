@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ordens de Produção · Gestão Operacional</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header class="topo">
+        <span class="marca">Gestão Operacional</span>
+        <nav>
+            <a href="index.html" class="ativo">Ordens de Produção</a>
+        </nav>
+    </header>
+
+    <main class="conteudo">
+        <div class="cabecalho-pagina">
+            <h1>Ordens de Produção</h1>
+            <span id="contador" class="contador"></span>
+        </div>
+
+        <!-- Mensagem de carregando / erro / lista vazia -->
+        <p id="mensagem" class="mensagem">Carregando...</p>
+
+        <table id="tabela-ops" class="tabela" hidden>
+            <thead>
+                <tr>
+                    <th>OP</th>
+                    <th>Cliente</th>
+                    <th>Status</th>
+                    <th>Setor atual</th>
+                    <th>Criada em</th>
+                </tr>
+            </thead>
+            <!-- As linhas são criadas pelo JavaScript -->
+            <tbody id="corpo-tabela"></tbody>
+        </table>
+    </main>
+
+    <!-- api.js primeiro, porque o lista.js usa as funções dele -->
+    <script src="js/api.js"></script>
+    <script src="js/lista.js"></script>
+</body>
+</html>

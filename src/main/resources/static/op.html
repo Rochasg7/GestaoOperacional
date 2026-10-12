@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhe da OP · Gestão Operacional</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header class="topo">
+        <span class="marca">Gestão Operacional</span>
+        <nav>
+            <a href="index.html" class="ativo">Ordens de Produção</a>
+        </nav>
+    </header>
+
+    <main class="conteudo">
+        <a href="index.html" class="voltar">← Voltar para a lista</a>
+
+        <p id="mensagem" class="mensagem">Carregando...</p>
+
+        <!-- Fica escondido até os dados chegarem -->
+        <div id="detalhe" hidden>
+
+            <!-- Resumo da OP -->
+            <section class="cartao">
+                <div class="cabecalho-pagina">
+                    <h1 id="op-numero"></h1>
+                    <span id="op-status"></span>
+                </div>
+                <dl class="resumo">
+                    <div><dt>Cliente</dt><dd id="op-cliente"></dd></div>
+                    <div><dt>Setor atual</dt><dd id="op-setor"></dd></div>
+                    <div><dt>Template</dt><dd id="op-template"></dd></div>
+                    <div><dt>Criada em</dt><dd id="op-criada"></dd></div>
+                </dl>
+            </section>
+
+            <!-- Materiais -->
+            <section class="cartao">
+                <h2>Materiais</h2>
+                <div class="rolagem-horizontal">
+                <table class="tabela tabela-simples">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Material</th>
+                            <th>Setor de destino</th>
+                            <th class="direita">Quantidade</th>
+                        </tr>
+                    </thead>
+                    <tbody id="corpo-materiais"></tbody>
+                </table>
+                </div>
+            </section>
+
+            <!-- Histórico -->
+            <section class="cartao">
+                <h2>Histórico</h2>
+                <p id="historico-vazio" class="texto-suave" hidden>
+                    Esta OP ainda não saiu da separação.
+                </p>
+                <ol id="lista-historico" class="historico"></ol>
+            </section>
+
+        </div>
+    </main>
+
+    <script src="js/api.js"></script>
+    <script src="js/op.js"></script>
+</body>
+</html>
